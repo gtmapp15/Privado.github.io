@@ -1,2 +1,714 @@
-# Privado.github.io
-Rwunion
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Asistencia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .btn-primary {
+            background-color: #2a5298;
+            border-color: #1e3c72;
+        }
+        .btn-primary:hover {
+            background-color: #1e3c72;
+            border-color: #162f5f;
+        }
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+        .table th {
+            background-color: #2a5298;
+            color: white;
+        }
+        #adminPanel {
+            display: none;
+        }
+        .location-selector {
+            border-left: 4px solid #2a5298;
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
+        .form-check-input:checked {
+            background-color: #2a5298;
+            border-color: #1e3c72;
+        }
+        .btn-danger-sm {
+            padding: 0.15rem 0.3rem;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card">
+                    <!-- Encabezado -->
+                    <div class="card-header header-bg text-center py-4">
+                        <h2><i class="fas fa-calendar-check me-2"></i>Confirmación de Asistencia</h2>
+                        <h4 class="mt-3">ENCUENTRO PRIVADO</h4>
+                        <h5>PRESIDENTES, SECRETARIOS GENERALES Y SECRETARIOS DE ORGANIZACIÓN</h5>
+                        <p class="mb-0 mt-2">Con el Dr. Guido Gómez Mazara</p>
+                    </div>
+                    
+                    <!-- Formulario de Confirmación -->
+                    <div class="card-body p-5" id="formSection">
+                        <form id="confirmacionForm">
+                            <div class="mb-4">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>Por favor complete todos los campos obligatorios para confirmar su asistencia.
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="nombre" class="form-label required-field">Nombre Completo</label>
+                                <input type="text" class="form-control form-control-lg" id="nombre" required placeholder="Ingrese su nombre completo">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="cedula" class="form-label required-field">Número de Cédula</label>
+                                <input type="text" class="form-control form-control-lg" id="cedula" required 
+                                       placeholder="Ej: 10299112344 (Ingrese su cedula)"
+                                       pattern="\d{3}-\d{7}-\d{1}" 
+                                       title="Formato: 000-0000000-0">
+                                <small class="text-muted">Ingrese solo números</small>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="cargo" class="form-label required-field">Cargo en el Partido</label>
+                                <select class="form-select form-select-lg" id="cargo" required>
+                                    <option value="" selected disabled>Seleccione su cargo</option>
+                                    <option value="Presidente">Presidente/a</option>
+                                    <option value="Secretario General">Secretario/a General</option>
+                                    <option value="Secretario de Organización">Secretario/a de Organización</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Selector de Ubicación -->
+                            <div class="mb-4 location-selector">
+                                <h5 class="mb-3"><i class="fas fa-map-marker-alt me-2"></i>Ubicación</h5>
+                                
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="tipoUbicacion" id="radioZona" value="zona" checked>
+                                    <label class="form-check-label" for="radioZona">
+                                        Seleccionar por Zona
+                                    </label>
+                                </div>
+                                
+                                <select class="form-select mb-4" id="zona">
+                                    <option value="" selected disabled>Seleccione una zona</option>
+                                    <option value="Zona Noroeste">Zona Noroeste</option>
+                                    <option value="Zona Norte">Zona Norte</option>
+                                    <option value="Zona Noreste">Zona Noreste</option>
+                                    <option value="Zona Oeste">Zona Oeste</option>
+                                    <option value="Zona Este">Zona Este</option>
+                                    <option value="Zona Sureste">Zona Sureste</option>
+                                    <option value="Zona Sur">Zona Sur</option>
+                                    <option value="Zona Suroeste">Zona Suroeste</option>
+                                    <option value="Madrid Capital">Madrid Capital</option>
+                                </select>
+                                
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="tipoUbicacion" id="radioMunicipio" value="municipio">
+                                    <label class="form-check-label" for="radioMunicipio">
+                                        Seleccionar por Municipio
+                                    </label>
+                                </div>
+                                
+                                <select class="form-select" id="municipio" disabled>
+                                    <option value="" selected disabled>Seleccione un municipio</option>
+                                    <!-- Zona Noroeste -->
+                                    <option value="Las Rozas de Madrid" data-zona="Zona Noroeste">Las Rozas de Madrid</option>
+                                    <option value="Majadahonda" data-zona="Zona Noroeste">Majadahonda</option>
+                                    <option value="Pozuelo de Alarcón" data-zona="Zona Noroeste">Pozuelo de Alarcón</option>
+                                    <option value="Boadilla del Monte" data-zona="Zona Noroeste">Boadilla del Monte</option>
+                                    <option value="Torrelodones" data-zona="Zona Noroeste">Torrelodones</option>
+                                    <option value="Collado Villalba" data-zona="Zona Noroeste">Collado Villalba</option>
+                                    <option value="Galapagar" data-zona="Zona Noroeste">Galapagar</option>
+                                    <option value="El Escorial" data-zona="Zona Noroeste">El Escorial</option>
+                                    <option value="San Lorenzo de El Escorial" data-zona="Zona Noroeste">San Lorenzo de El Escorial</option>
+                                    <option value="Hoyo de Manzanares" data-zona="Zona Noroeste">Hoyo de Manzanares</option>
+                                    <option value="Moralzarzal" data-zona="Zona Noroeste">Moralzarzal</option>
+                                    <option value="Guadarrama" data-zona="Zona Noroeste">Guadarrama</option>
+                                    <option value="Valdemorillo" data-zona="Zona Noroeste">Valdemorillo</option>
+                                    <option value="Villanueva del Pardillo" data-zona="Zona Noroeste">Villanueva del Pardillo</option>
+                                    <option value="Colmenarejo" data-zona="Zona Noroeste">Colmenarejo</option>
+                                    
+                                    <!-- Zona Norte -->
+                                    <option value="Alcobendas" data-zona="Zona Norte">Alcobendas</option>
+                                    <option value="San Sebastián de los Reyes" data-zona="Zona Norte">San Sebastián de los Reyes</option>
+                                    <option value="Tres Cantos" data-zona="Zona Norte">Tres Cantos</option>
+                                    <option value="Colmenar Viejo" data-zona="Zona Norte">Colmenar Viejo</option>
+                                    <option value="Algete" data-zona="Zona Norte">Algete</option>
+                                    <option value="El Molar" data-zona="Zona Norte">El Molar</option>
+                                    <option value="San Agustín del Guadalix" data-zona="Zona Norte">San Agustín del Guadalix</option>
+                                    <option value="Miraflores de la Sierra" data-zona="Zona Norte">Miraflores de la Sierra</option>
+                                    <option value="Guadalix de la Sierra" data-zona="Zona Norte">Guadalix de la Sierra</option>
+                                    <option value="Soto del Real" data-zona="Zona Norte">Soto del Real</option>
+                                    <option value="Manzanares el Real" data-zona="Zona Norte">Manzanares el Real</option>
+                                    <option value="Pedrezuela" data-zona="Zona Norte">Pedrezuela</option>
+                                    <option value="Bustarviejo" data-zona="Zona Norte">Bustarviejo</option>
+                                    <option value="Rascafría" data-zona="Zona Norte">Rascafría</option>
+                                    <option value="La Cabrera" data-zona="Zona Norte">La Cabrera</option>
+                                    <option value="Lozoyuela" data-zona="Zona Norte">Lozoyuela</option>
+                                    <option value="Buitrago del Lozoya" data-zona="Zona Norte">Buitrago del Lozoya</option>
+                                    <option value="Canencia" data-zona="Zona Norte">Canencia</option>
+                                    <option value="Torrelaguna" data-zona="Zona Norte">Torrelaguna</option>
+                                    
+                                    <!-- Zona Noreste -->
+                                    <option value="Alcalá de Henares" data-zona="Zona Noreste">Alcalá de Henares</option>
+                                    <option value="Torrejón de Ardoz" data-zona="Zona Noreste">Torrejón de Ardoz</option>
+                                    <option value="Coslada" data-zona="Zona Noreste">Coslada</option>
+                                    <option value="San Fernando de Henares" data-zona="Zona Noreste">San Fernando de Henares</option>
+                                    <option value="Loeches" data-zona="Zona Noreste">Loeches</option>
+                                    <option value="Daganzo de Arriba" data-zona="Zona Noreste">Daganzo de Arriba</option>
+                                    <option value="Meco" data-zona="Zona Noreste">Meco</option>
+                                    <option value="Ajalvir" data-zona="Zona Noreste">Ajalvir</option>
+                                    <option value="Paracuellos de Jarama" data-zona="Zona Noreste">Paracuellos de Jarama</option>
+                                    <option value="Velilla de San Antonio" data-zona="Zona Noreste">Velilla de San Antonio</option>
+                                    <option value="Nuevo Baztán" data-zona="Zona Noreste">Nuevo Baztán</option>
+                                    <option value="Villalbilla" data-zona="Zona Noreste">Villalbilla</option>
+                                    <option value="Camarma de Esteruelas" data-zona="Zona Noreste">Camarma de Esteruelas</option>
+                                    <option value="Anchuelo" data-zona="Zona Noreste">Anchuelo</option>
+                                    <option value="Torres de la Alameda" data-zona="Zona Noreste">Torres de la Alameda</option>
+                                    <option value="Corpa" data-zona="Zona Noreste">Corpa</option>
+                                    <option value="Pezuela de las Torres" data-zona="Zona Noreste">Pezuela de las Torres</option>
+                                    
+                                    <!-- Zona Oeste -->
+                                    <option value="Villanueva de la Cañada" data-zona="Zona Oeste">Villanueva de la Cañada</option>
+                                    <option value="Brunete" data-zona="Zona Oeste">Brunete</option>
+                                    <option value="Quijorna" data-zona="Zona Oeste">Quijorna</option>
+                                    <option value="Sevilla la Nueva" data-zona="Zona Oeste">Sevilla la Nueva</option>
+                                    <option value="Valdemorillo" data-zona="Zona Oeste">Valdemorillo</option>
+                                    <option value="Villanueva del Pardillo" data-zona="Zona Oeste">Villanueva del Pardillo</option>
+                                    <option value="Navalagamella" data-zona="Zona Oeste">Navalagamella</option>
+                                    <option value="Colmenar del Arroyo" data-zona="Zona Oeste">Colmenar del Arroyo</option>
+                                    <option value="Chapinería" data-zona="Zona Oeste">Chapinería</option>
+                                    <option value="Fresnedillas de la Oliva" data-zona="Zona Oeste">Fresnedillas de la Oliva</option>
+                                    <option value="Robledo de Chavela" data-zona="Zona Oeste">Robledo de Chavela</option>
+                                    <option value="Zarzalejo" data-zona="Zona Oeste">Zarzalejo</option>
+                                    
+                                    <!-- Zona Este -->
+                                    <option value="Rivas-Vaciamadrid" data-zona="Zona Este">Rivas-Vaciamadrid</option>
+                                    <option value="Arganda del Rey" data-zona="Zona Este">Arganda del Rey</option>
+                                    <option value="Mejorada del Campo" data-zona="Zona Este">Mejorada del Campo</option>
+                                    <option value="Campo Real" data-zona="Zona Este">Campo Real</option>
+                                    <option value="Morata de Tajuña" data-zona="Zona Este">Morata de Tajuña</option>
+                                    <option value="Loeches" data-zona="Zona Este">Loeches</option>
+                                    <option value="Velilla de San Antonio" data-zona="Zona Este">Velilla de San Antonio</option>
+                                    <option value="Perales de Tajuña" data-zona="Zona Este">Perales de Tajuña</option>
+                                    <option value="Tielmes" data-zona="Zona Este">Tielmes</option>
+                                    <option value="Orusco de Tajuña" data-zona="Zona Este">Orusco de Tajuña</option>
+                                    <option value="Carabaña" data-zona="Zona Este">Carabaña</option>
+                                    <option value="Ambite" data-zona="Zona Este">Ambite</option>
+                                    <option value="Villarejo de Salvanés" data-zona="Zona Este">Villarejo de Salvanés</option>
+                                    <option value="Valdaracete" data-zona="Zona Este">Valdaracete</option>
+                                    <option value="Fuentidueña de Tajo" data-zona="Zona Este">Fuentidueña de Tajo</option>
+                                    <option value="Estremera" data-zona="Zona Este">Estremera</option>
+                                    
+                                    <!-- Zona Sureste -->
+                                    <option value="Chinchón" data-zona="Zona Sureste">Chinchón</option>
+                                    <option value="Colmenar de Oreja" data-zona="Zona Sureste">Colmenar de Oreja</option>
+                                    <option value="Belmonte de Tajo" data-zona="Zona Sureste">Belmonte de Tajo</option>
+                                    <option value="Villamanrique de Tajo" data-zona="Zona Sureste">Villamanrique de Tajo</option>
+                                    <option value="Brea de Tajo" data-zona="Zona Sureste">Brea de Tajo</option>
+                                    <option value="Fuentidueña de Tajo" data-zona="Zona Sureste">Fuentidueña de Tajo</option>
+                                    <option value="Tielmes" data-zona="Zona Sureste">Tielmes</option>
+                                    <option value="Perales de Tajuña" data-zona="Zona Sureste">Perales de Tajuña</option>
+                                    <option value="Titulcia" data-zona="Zona Sureste">Titulcia</option>
+                                    <option value="Valdelaguna" data-zona="Zona Sureste">Valdelaguna</option>
+                                    <option value="Villarejo de Salvanés" data-zona="Zona Sureste">Villarejo de Salvanés</option>
+                                    <option value="Estremera" data-zona="Zona Sureste">Estremera</option>
+                                    <option value="Ambite" data-zona="Zona Sureste">Ambite</option>
+                                    
+                                    <!-- Zona Sur -->
+                                    <option value="Getafe" data-zona="Zona Sur">Getafe</option>
+                                    <option value="Leganés" data-zona="Zona Sur">Leganés</option>
+                                    <option value="Fuenlabrada" data-zona="Zona Sur">Fuenlabrada</option>
+                                    <option value="Parla" data-zona="Zona Sur">Parla</option>
+                                    <option value="Pinto" data-zona="Zona Sur">Pinto</option>
+                                    <option value="Valdemoro" data-zona="Zona Sur">Valdemoro</option>
+                                    <option value="Humanes de Madrid" data-zona="Zona Sur">Humanes de Madrid</option>
+                                    <option value="Griñón" data-zona="Zona Sur">Griñón</option>
+                                    <option value="Torrejón de la Calzada" data-zona="Zona Sur">Torrejón de la Calzada</option>
+                                    <option value="Torrejón de Velasco" data-zona="Zona Sur">Torrejón de Velasco</option>
+                                    <option value="Cubas de la Sagra" data-zona="Zona Sur">Cubas de la Sagra</option>
+                                    <option value="Serranillos del Valle" data-zona="Zona Sur">Serranillos del Valle</option>
+                                    <option value="Casarrubuelos" data-zona="Zona Sur">Casarrubuelos</option>
+                                    
+                                    <!-- Zona Suroeste -->
+                                    <option value="Móstoles" data-zona="Zona Suroeste">Móstoles</option>
+                                    <option value="Alcorcón" data-zona="Zona Suroeste">Alcorcón</option>
+                                    <option value="Arroyomolinos" data-zona="Zona Suroeste">Arroyomolinos</option>
+                                    <option value="Navalcarnero" data-zona="Zona Suroeste">Navalcarnero</option>
+                                    <option value="Villaviciosa de Odón" data-zona="Zona Suroeste">Villaviciosa de Odón</option>
+                                    <option value="El Álamo" data-zona="Zona Suroeste">El Álamo</option>
+                                    <option value="Sevilla la Nueva" data-zona="Zona Suroeste">Sevilla la Nueva</option>
+                                    <option value="Batres" data-zona="Zona Suroeste">Batres</option>
+                                    <option value="Villamantilla" data-zona="Zona Suroeste">Villamantilla</option>
+                                    <option value="Villamanta" data-zona="Zona Suroeste">Villamanta</option>
+                                    <option value="Aldea del Fresno" data-zona="Zona Suroeste">Aldea del Fresno</option>
+                                    <option value="Navas del Rey" data-zona="Zona Suroeste">Navas del Rey</option>
+                                    <option value="Chapinería" data-zona="Zona Suroeste">Chapinería</option>
+                                    <option value="San Martín de Valdeiglesias" data-zona="Zona Suroeste">San Martín de Valdeiglesias</option>
+                                    <option value="Pelayos de la Presa" data-zona="Zona Suroeste">Pelayos de la Presa</option>
+                                    
+                                    <!-- Madrid Capital -->
+                                    <option value="Centro" data-zona="Madrid Capital">Centro (Madrid)</option>
+                                    <option value="Arganzuela" data-zona="Madrid Capital">Arganzuela (Madrid)</option>
+                                    <option value="Retiro" data-zona="Madrid Capital">Retiro (Madrid)</option>
+                                    <option value="Salamanca" data-zona="Madrid Capital">Salamanca (Madrid)</option>
+                                    <option value="Chamartín" data-zona="Madrid Capital">Chamartín (Madrid)</option>
+                                    <option value="Tetuán" data-zona="Madrid Capital">Tetuán (Madrid)</option>
+                                    <option value="Chamberí" data-zona="Madrid Capital">Chamberí (Madrid)</option>
+                                    <option value="Fuencarral-El Pardo" data-zona="Madrid Capital">Fuencarral-El Pardo (Madrid)</option>
+                                    <option value="Moncloa-Aravaca" data-zona="Madrid Capital">Moncloa-Aravaca (Madrid)</option>
+                                    <option value="Latina" data-zona="Madrid Capital">Latina (Madrid)</option>
+                                    <option value="Carabanchel" data-zona="Madrid Capital">Carabanchel (Madrid)</option>
+                                    <option value="Usera" data-zona="Madrid Capital">Usera (Madrid)</option>
+                                    <option value="Puente de Vallecas" data-zona="Madrid Capital">Puente de Vallecas (Madrid)</option>
+                                    <option value="Moratalaz" data-zona="Madrid Capital">Moratalaz (Madrid)</option>
+                                    <option value="Ciudad Lineal" data-zona="Madrid Capital">Ciudad Lineal (Madrid)</option>
+                                    <option value="Hortaleza" data-zona="Madrid Capital">Hortaleza (Madrid)</option>
+                                    <option value="Villaverde" data-zona="Madrid Capital">Villaverde (Madrid)</option>
+                                    <option value="Villa de Vallecas" data-zona="Madrid Capital">Villa de Vallecas (Madrid)</option>
+                                    <option value="Vicálvaro" data-zona="Madrid Capital">Vicálvaro (Madrid)</option>
+                                    <option value="San Blas-Canillejas" data-zona="Madrid Capital">San Blas-Canillejas (Madrid)</option>
+                                    <option value="Barajas" data-zona="Madrid Capital">Barajas (Madrid)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="comentarios" class="form-label">Comentarios adicionales</label>
+                                <textarea class="form-control" id="comentarios" rows="3" placeholder="Si desea agregar algún comentario especial"></textarea>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-5">
+                                <button class="btn btn-primary btn-lg" type="submit">
+                                    <i class="fas fa-paper-plane me-2"></i>Confirmar Asistencia
+                                </button>
+                                <button type="button" id="btnAdmin" class="btn btn-outline-secondary btn-sm mt-3">
+                                    <i class="fas fa-lock me-2"></i>Acceso Administrador
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Panel de Administración (oculto inicialmente) -->
+                    <div class="card-body p-5" id="adminPanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3 class="mb-0"><i class="fas fa-users me-2"></i>Lista de Confirmados</h3>
+                            <div>
+                                <button id="borrarTodos" class="btn btn-danger me-2">
+                                    <i class="fas fa-trash-alt me-2"></i>Borrar Todos
+                                </button>
+                                <button id="generarPDF" class="btn btn-primary me-2">
+                                    <i class="fas fa-file-pdf me-2"></i>Generar PDF
+                                </button>
+                                <button id="cerrarAdmin" class="btn btn-outline-secondary">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Salir
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Cédula</th>
+                                        <th>Cargo</th>
+                                        <th>Ubicación</th>
+                                        <th>Fecha</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaConfirmados">
+                                    <!-- Datos se cargarán aquí -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Pie de página -->
+                    <div class="card-footer text-center py-3">
+                        <p class="mb-0 text-muted">Agradecemos su confirmación para este importante encuentro</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para código de acceso -->
+    <div class="modal fade" id="codigoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title"><i class="fas fa-lock me-2"></i>Acceso Administrador</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inputCodigo" class="form-label">Ingrese el código de acceso</label>
+                        <input type="password" class="form-control" id="inputCodigo" placeholder="Código">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnVerificarCodigo" class="btn btn-danger">Verificar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para borrar -->
+    <div class="modal fade" id="confirmarBorradoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>Confirmar Borrado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="mensajeBorrado">¿Está seguro que desea borrar este registro?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnConfirmarBorrado" class="btn btn-danger">Borrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jsPDF para generar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    
+    <script>
+        // Configuración
+        const CONFIG = {
+            CODIGO_ADMIN: "123456", // Cambia esto por un código seguro
+            STORAGE_KEY: "confirmadosReunion"
+        };
+        
+        // Elementos del DOM
+        const formSection = document.getElementById('formSection');
+        const adminPanel = document.getElementById('adminPanel');
+        const confirmacionForm = document.getElementById('confirmacionForm');
+        const btnAdmin = document.getElementById('btnAdmin');
+        const listaConfirmados = document.getElementById('listaConfirmados');
+        const btnVerificarCodigo = document.getElementById('btnVerificarCodigo');
+        const inputCodigo = document.getElementById('inputCodigo');
+        const generarPDF = document.getElementById('generarPDF');
+        const cerrarAdmin = document.getElementById('cerrarAdmin');
+        const borrarTodos = document.getElementById('borrarTodos');
+        const codigoModal = new bootstrap.Modal(document.getElementById('codigoModal'));
+        const confirmarBorradoModal = new bootstrap.Modal(document.getElementById('confirmarBorradoModal'));
+        const mensajeBorrado = document.getElementById('mensajeBorrado');
+        const btnConfirmarBorrado = document.getElementById('btnConfirmarBorrado');
+        
+        // Elementos de ubicación
+        const radioZona = document.getElementById('radioZona');
+        const radioMunicipio = document.getElementById('radioMunicipio');
+        const selectZona = document.getElementById('zona');
+        const selectMunicipio = document.getElementById('municipio');
+        
+        // Variables para borrado
+        let cedulaABorrar = null;
+        let borrarTodo = false;
+        
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si hay datos guardados
+            if (!localStorage.getItem(CONFIG.STORAGE_KEY)) {
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify([]));
+            }
+            
+            // Event listeners
+            btnAdmin.addEventListener('click', mostrarModalCodigo);
+            btnVerificarCodigo.addEventListener('click', verificarCodigo);
+            cerrarAdmin.addEventListener('click', cerrarPanelAdmin);
+            generarPDF.addEventListener('click', generarPDFLista);
+            borrarTodos.addEventListener('click', prepararBorradoTotal);
+            btnConfirmarBorrado.addEventListener('click', ejecutarBorrado);
+            
+            // Manejar envío del formulario
+            confirmacionForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                confirmarAsistencia();
+            });
+            
+            // Manejar cambios en selección de ubicación
+            radioZona.addEventListener('change', function() {
+                selectZona.disabled = !this.checked;
+                selectMunicipio.disabled = this.checked;
+                if (this.checked) selectMunicipio.value = "";
+            });
+            
+            radioMunicipio.addEventListener('change', function() {
+                selectMunicipio.disabled = !this.checked;
+                selectZona.disabled = this.checked;
+                if (this.checked) selectZona.value = "";
+            });
+            
+            // Cuando se selecciona un municipio, actualizar la zona automáticamente
+            selectMunicipio.addEventListener('change', function() {
+                if (this.value) {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const zona = selectedOption.getAttribute('data-zona');
+                    selectZona.value = zona;
+                }
+            });
+            
+            // Formatear cédula automáticamente
+            document.getElementById('cedula').addEventListener('input', function(e) {
+                // Eliminar todos los caracteres que no sean números
+                let value = this.value.replace(/\D/g, '');
+                
+                // Aplicar formato: 000-0000000-0
+                if (value.length > 3) {
+                    value = value.substring(0, 3) + '-' + value.substring(3);
+                }
+                if (value.length > 11) {
+                    value = value.substring(0, 11) + '-' + value.substring(11);
+                }
+                if (value.length > 13) {
+                    value = value.substring(0, 13);
+                }
+                
+                this.value = value;
+            });
+        });
+        
+        // Funciones
+        
+        function mostrarModalCodigo() {
+            inputCodigo.value = "";
+            codigoModal.show();
+        }
+        
+        function verificarCodigo() {
+            if (inputCodigo.value === CONFIG.CODIGO_ADMIN) {
+                codigoModal.hide();
+                formSection.style.display = 'none';
+                adminPanel.style.display = 'block';
+                cargarListaConfirmados();
+            } else {
+                alert("Código incorrecto. Intente nuevamente.");
+                inputCodigo.value = "";
+                inputCodigo.focus();
+            }
+        }
+        
+        function cerrarPanelAdmin() {
+            formSection.style.display = 'block';
+            adminPanel.style.display = 'none';
+        }
+        
+        function cargarListaConfirmados() {
+            const confirmados = obtenerConfirmados();
+            listaConfirmados.innerHTML = '';
+            
+            if (confirmados.length === 0) {
+                listaConfirmados.innerHTML = '<tr><td colspan="6" class="text-center">No hay confirmaciones registradas</td></tr>';
+                return;
+            }
+            
+            confirmados.forEach(persona => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${persona.nombre}</td>
+                    <td>${persona.cedula}</td>
+                    <td>${persona.cargo}</td>
+                    <td>${persona.ubicacion}</td>
+                    <td>${new Date(persona.fecha).toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm btn-eliminar" data-cedula="${persona.cedula}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                listaConfirmados.appendChild(tr);
+            });
+            
+            // Agregar event listeners a los botones de eliminar
+            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    prepararBorradoIndividual(this.getAttribute('data-cedula'));
+                });
+            });
+        }
+        
+        function confirmarAsistencia() {
+            const nombre = document.getElementById('nombre').value.trim();
+            let cedula = document.getElementById('cedula').value.trim();
+            const cargo = document.getElementById('cargo').value;
+            const comentarios = document.getElementById('comentarios').value.trim();
+            
+            // Validar formato de cédula
+            if (!/^\d{3}-\d{7}-\d{1}$/.test(cedula)) {
+                alert("Por favor ingrese una cédula válida en formato 000-0000000-0");
+                return;
+            }
+            
+            // Obtener ubicación seleccionada
+            let ubicacion = "";
+            if (radioZona.checked && selectZona.value) {
+                ubicacion = selectZona.value;
+            } else if (radioMunicipio.checked && selectMunicipio.value) {
+                ubicacion = `${selectMunicipio.value} (${selectZona.value})`;
+            } else {
+                alert("Por favor seleccione una zona o un municipio");
+                return;
+            }
+            
+            if (!nombre || !cedula || !cargo || !ubicacion) {
+                alert("Por favor complete todos los campos obligatorios");
+                return;
+            }
+            
+            // Verificar si ya existe una confirmación con esta cédula
+            const confirmados = obtenerConfirmados();
+            const existe = confirmados.some(p => p.cedula === cedula);
+            
+            if (existe) {
+                alert("Ya existe una confirmación con este número de cédula");
+                return;
+            }
+            
+            // Agregar nueva confirmación
+            const nuevaConfirmacion = {
+                nombre,
+                cedula,
+                cargo,
+                ubicacion,
+                comentarios: comentarios || "Ninguno",
+                fecha: new Date().toISOString()
+            };
+            
+            confirmados.push(nuevaConfirmacion);
+            guardarConfirmados(confirmados);
+            
+            alert(`¡Gracias ${nombre}!\nSu confirmación ha sido registrada exitosamente.`);
+            confirmacionForm.reset();
+            selectZona.value = "";
+            selectMunicipio.value = "";
+            radioZona.checked = true;
+            radioMunicipio.checked = false;
+            selectZona.disabled = false;
+            selectMunicipio.disabled = true;
+        }
+        
+        function obtenerConfirmados() {
+            const datos = localStorage.getItem(CONFIG.STORAGE_KEY);
+            return JSON.parse(datos) || [];
+        }
+        
+        function guardarConfirmados(confirmados) {
+            localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(confirmados));
+        }
+        
+        function generarPDFLista() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Título
+            doc.setFontSize(18);
+            doc.text('Lista de Confirmados - ENCUENTRO PRIVADO', 14, 20);
+            doc.setFontSize(12);
+            doc.text('Con el Dr. Guido Gómez Mazara', 14, 28);
+            doc.text(`Generado el ${new Date().toLocaleDateString()}`, 14, 36);
+            
+            // Obtener datos
+            const confirmados = obtenerConfirmados();
+            
+            // Preparar datos para la tabla
+            const data = confirmados.map(p => [
+                p.nombre,
+                p.cedula,
+                p.cargo,
+                p.ubicacion,
+                new Date(p.fecha).toLocaleDateString()
+            ]);
+            
+            // Crear tabla
+            doc.autoTable({
+                head: [['Nombre', 'Cédula', 'Cargo', 'Ubicación', 'Fecha']],
+                body: data,
+                startY: 40,
+                styles: {
+                    halign: 'center',
+                    cellPadding: 3,
+                    fontSize: 10
+                },
+                headStyles: {
+                    fillColor: [42, 82, 152], // Color azul
+                    textColor: 255
+                },
+                columnStyles: {
+                    3: {cellWidth: 'auto'}
+                }
+            });
+            
+            // Guardar PDF
+            doc.save('lista_confirmados.pdf');
+        }
+        
+        function prepararBorradoIndividual(cedula) {
+            cedulaABorrar = cedula;
+            borrarTodo = false;
+            
+            // Obtener el nombre de la persona para mostrar en el mensaje
+            const confirmados = obtenerConfirmados();
+            const persona = confirmados.find(p => p.cedula === cedula);
+            const nombre = persona ? persona.nombre : '';
+            
+            mensajeBorrado.innerHTML = `¿Está seguro que desea borrar el registro de <strong>${nombre}</strong> (Cédula: ${cedula})?`;
+            confirmarBorradoModal.show();
+        }
+        
+        function prepararBorradoTotal() {
+            cedulaABorrar = null;
+            borrarTodo = true;
+            
+            const confirmados = obtenerConfirmados();
+            mensajeBorrado.innerHTML = `¿Está seguro que desea borrar <strong>todos</strong> los registros (${confirmados.length} confirmaciones)?`;
+            confirmarBorradoModal.show();
+        }
+        
+        function ejecutarBorrado() {
+            if (borrarTodo) {
+                // Borrar todos los registros
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify([]));
+                alert("Todos los registros han sido eliminados");
+            } else {
+                // Borrar un registro específico
+                const confirmados = obtenerConfirmados();
+                const nuevosConfirmados = confirmados.filter(p => p.cedula !== cedulaABorrar);
+                guardarConfirmados(nuevosConfirmados);
+                alert("El registro ha sido eliminado");
+            }
+            
+            confirmarBorradoModal.hide();
+            cargarListaConfirmados();
+        }
+    </script>
+</body>
+</html>
